@@ -5,9 +5,9 @@ exports.getRooms = (req, res) => {
 };
 
 exports.getRoom = (req, res) => {
-  const index = MockRooms.findIndex((item) => item.id === req.params.id);
-  MockRooms[index] = { ...MockRooms[index] };
-  res.json(MockRooms[index]);
+  const room = MockRooms.findIndex((item) => item.id === req.params.id);
+
+  res.json({ room });
 };
 
 exports.createNewRoom = (req, res) => {

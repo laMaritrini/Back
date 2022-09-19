@@ -3,12 +3,16 @@ let express = require("express");
 let path = require("path");
 let cookieParser = require("cookie-parser");
 let logger = require("morgan");
-
 var indexRouter = require("./routes/index");
 let usersRouter = require("./routes/users");
 let bookingsRouter = require("./routes/bookings");
 let roomsRouter = require("./routes/rooms");
 let contactRouter = require("./routes/contacts");
+let loginRouter = require("./routes/login");
+// let authRouter = require('./auth/auth')
+
+const passport = require("passport");
+var session = require("express-session");
 
 var app = express();
 
@@ -23,10 +27,29 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
-app.use("/bookings", bookingsRouter);
-app.use("/rooms", roomsRouter);
-app.use("/contacts", contactRouter);
-app.use("/users", usersRouter);
+// app.use("/auth", authRouter)
+app.use("/login", loginRouter);
+
+app.use(
+  "/bookings",
+  passport.authenticate("jwt", { session: false }),
+  bookingsRouter
+);
+app.use(
+  "/rooms",
+  passport.authenticate("jwt", { session: false }),
+  roomsRouter
+);
+app.use(
+  "/contacts",
+  passport.authenticate("jwt", { session: false }),
+  contactRouter
+);
+app.use(
+  "/users",
+  passport.authenticate("jwt", { session: false }),
+  usersRouter
+);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

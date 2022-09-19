@@ -1,4 +1,6 @@
 var express = require("express");
+
+
 const {
   getBookings,
   getBooking,
@@ -9,7 +11,7 @@ const {
 
 var router = express.Router();
 
-router.get("/", getBookings);
+router.get("/",  getBookings);
 router.get("/:id", getBooking);
 router.post("/", createNewBooking);
 router.delete("/:id", deleteBooking);
