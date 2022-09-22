@@ -9,12 +9,14 @@ let bookingsRouter = require("./routes/bookings");
 let roomsRouter = require("./routes/rooms");
 let contactRouter = require("./routes/contacts");
 let loginRouter = require("./routes/login");
-// let authRouter = require('./auth/auth')
+const mysql = require("mysql");
+
 
 const passport = require("passport");
-var session = require("express-session");
 
 var app = express();
+
+
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -65,6 +67,9 @@ app.use(function (err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render("error");
+});
+app.listen(4000, () => {
+  console.log("Listening on port 4000");
 });
 
 module.exports = app;
