@@ -1,17 +1,29 @@
-const MockContacts = require("../data/mockContacts");
+const { db } = require("../db");
 
 exports.getContacts = (req, res) => {
-  res.json(MockContacts);
+  db.query("SELECT * FROM contacts", (err, rows, field) => {
+    if (!err) res.send(rows);
+    else console.log(err);
+  });
 };
 
 exports.getContact = (req, res) => {
-  const index = MockContacts.findIndex((item) => item.id === req.params.id);
-  MockContacts[index] = { ...MockContacts[index] };
-  res.json(MockContacts[index]);
+  db.query(
+    "SELECT * FROM contacts WHERE id = ?",
+    [req.params.id],
+    (err, rows, field) => {
+      if (!err) res.send(rows);
+      else console.log(err);
+    }
+  );
 };
 exports.deleteContact = (req, res) => {
-  let newMockContacts = MockContacts.filter(
-    (item) => item.id !== req.params.id
+  db.query(
+    "DELETE FROM contacts WHERE id = ?",
+    [req.params.id],
+    (err, rows, field) => {
+      if (!err) res.send("Booking deleted successfully.");
+      else console.log(err);
+    }
   );
-  res.json(newMockContacts);
 };

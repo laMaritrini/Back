@@ -12,7 +12,6 @@ exports.getBooking = (req, res) => {
     "SELECT * FROM bookings WHERE id = ?",
     [req.params.id],
     (err, rows, field) => {
-      console.log(req.params.id);
       if (!err) res.send(rows);
       else console.log(err);
     }
