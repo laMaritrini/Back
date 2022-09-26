@@ -1,28 +1,53 @@
-const MockRooms = require("../data/mockRooms");
+require("../db");
+const Room = require("../models/room-model");
 
 exports.getRooms = (req, res) => {
-  res.json(MockRooms);
+  Room.find({}, (err, room) => {
+    if (err) {
+      res.send(err);
+    }
+    res.json(room);
+  });
 };
 
 exports.getRoom = (req, res) => {
-  const room = MockRooms.findIndex((item) => item.id === req.params.id);
-
-  res.json({ room });
+  Room.findById(req.params.id, (err, room) => {
+    if (err) {
+      res.send(err);
+    }
+    res.json(room);
+  });
 };
 
 exports.createNewRoom = (req, res) => {
-  const newRoom = { ...req.body };
-  MockRooms.push(newRoom);
-  res.json(newRoom);
+  let newRoom = new Room(req.body);
+  newRoom.save((err, room) => {
+    if (err) {
+      res.send(err);
+    }
+    res.json(room);
+  });
 };
 
 exports.deleteRoom = (req, res) => {
-  let newMockRooms = MockRooms.filter((item) => item.id !== req.params.id);
-  res.json(newMockRooms);
+  Room.remove({ _id: req.params.id }, (err, room) => {
+    if (err) {
+      res.send(err);
+    }
+    res.json({ message: "Successfully deleted room!" });
+  });
 };
 
 exports.updateRoom = (req, res) => {
-  const index = MockRooms.findIndex((item) => item.id === req.params.id);
-  MockRooms[index] = { ...MockRooms[index], ...req.body };
-  res.json(MockRooms[index]);
+  Room.findOneAndUpdate(
+    { _id: req.params.id },
+    req.body,
+    { new: true },
+    (err, room) => {
+      if (err) {
+        res.send(err);
+      }
+      res.json(room);
+    }
+  );
 };

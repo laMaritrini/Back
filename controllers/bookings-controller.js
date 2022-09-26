@@ -1,4 +1,4 @@
-const MockReservations = require("../data/mockReservations");
+
 require("../db");
 const Booking = require("../models/booking-model");
 
