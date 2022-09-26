@@ -11,21 +11,21 @@ exports.getUsers = (req, res) => {
 };
 
 exports.getUser = (req, res) => {
-  User.findById(req.params.id, (err, contact) => {
+  User.findById(req.params.id, (err, user) => {
     if (err) {
       res.send(err);
     }
-    res.json(contact);
+    res.json(user);
   });
 };
 
 exports.createNewUser = (req, res) => {
   let newUser = new User(req.body);
-  newUser.save((err, contact) => {
+  newUser.save((err, user) => {
     if (err) {
       res.send(err);
     }
-    res.json(contact);
+    res.json(user);
   });
 };
 
@@ -43,11 +43,11 @@ exports.updateUser = (req, res) => {
     { _id: req.params.id },
     req.body,
     { new: true },
-    (err, contact) => {
+    (err, user) => {
       if (err) {
         res.send(err);
       }
-      res.json(contact);
+      res.json(user);
     }
   );
 };
