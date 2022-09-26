@@ -1,30 +1,54 @@
 const MockReservations = require("../data/mockReservations");
+require("../db");
+const Booking = require("../models/booking-model");
 
 exports.getBookings = (req, res) => {
-  res.json(MockReservations);
+  Booking.find({}, (err, booking) => {
+    if (err) {
+      res.send(err);
+    }
+    res.json(booking);
+  });
 };
 
 exports.getBooking = (req, res) => {
-  const index = MockReservations.findIndex((item) => item.id === req.params.id);
-  MockReservations[index] = { ...MockReservations[index] };
-  res.json(MockReservations[index]);
+  Booking.findById(req.params.id, (err, booking) => {
+    if (err) {
+      res.send(err);
+    }
+    res.json(booking);
+  });
 };
 
 exports.createNewBooking = (req, res) => {
-  const newBooking = { ...req.body };
-  MockReservations.push(newBooking);
-  res.json(newBooking);
+  let newBooking = new Booking(req.body);
+  newBooking.save((err, booking) => {
+    if (err) {
+      res.send(err);
+    }
+    res.json(booking);
+  });
 };
 
 exports.deleteBooking = (req, res) => {
-  let newMockReservations = MockReservations.filter(
-    (item) => item.id !== req.params.id
-  );
-  res.json(newMockReservations);
+  Booking.remove({ _id: req.params.id }, (err, booking) => {
+    if (err) {
+      res.send(err);
+    }
+    res.json({ message: "Successfully deleted booking!" });
+  });
 };
 
 exports.updateBooking = (req, res) => {
-  const index = MockReservations.findIndex((item) => item.id === req.params.id);
-  MockReservations[index] = { ...MockReservations[index], ...req.body };
-  res.json(MockReservations[index]);
+  Booking.findOneAndUpdate(
+    { _id: req.params.id },
+    req.body,
+    { new: true },
+    (err, booking) => {
+      if (err) {
+        res.send(err);
+      }
+      res.json(booking);
+    }
+  );
 };
