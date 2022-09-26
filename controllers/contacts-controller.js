@@ -1,17 +1,28 @@
-const MockContacts = require("../data/mockContacts");
+require("../db");
+const Contact = require("../models/contact-model");
 
 exports.getContacts = (req, res) => {
-  res.json(MockContacts);
+  Contact.find({}, (err, contact) => {
+    if (err) {
+      res.send(err);
+    }
+    res.json(contact);
+  });
 };
 
 exports.getContact = (req, res) => {
-  const index = MockContacts.findIndex((item) => item.id === req.params.id);
-  MockContacts[index] = { ...MockContacts[index] };
-  res.json(MockContacts[index]);
+  Contact.findById(req.params.id, (err, contact) => {
+    if (err) {
+      res.send(err);
+    }
+    res.json(contact);
+  });
 };
 exports.deleteContact = (req, res) => {
-  let newMockContacts = MockContacts.filter(
-    (item) => item.id !== req.params.id
-  );
-  res.json(newMockContacts);
+  Contact.remove({ _id: req.params.id }, (err, contact) => {
+    if (err) {
+      res.send(err);
+    }
+    res.json({ message: "Successfully deleted contact!" });
+  });
 };
