@@ -1,28 +1,53 @@
-const MockUsers = require("../data/mockUsers");
+require("../db");
+const User = require("../models/user-model");
 
 exports.getUsers = (req, res) => {
-  res.json(MockUsers);
+  User.find({}, (err, user) => {
+    if (err) {
+      res.send(err);
+    }
+    res.json(user);
+  });
 };
 
 exports.getUser = (req, res) => {
-  const index = MockUsers.findIndex((item) => item.id === req.params.id);
-  MockUsers[index] = { ...MockUsers[index] };
-  res.json(MockUsers[index]);
+  User.findById(req.params.id, (err, contact) => {
+    if (err) {
+      res.send(err);
+    }
+    res.json(contact);
+  });
 };
 
 exports.createNewUser = (req, res) => {
-  const newUser = { ...req.body };
-  MockUsers.push(newUser);
-  res.json(newUser);
+  let newUser = new User(req.body);
+  newUser.save((err, contact) => {
+    if (err) {
+      res.send(err);
+    }
+    res.json(contact);
+  });
 };
 
 exports.deleteUser = (req, res) => {
-  let newMockUsers = MockUsers.filter((item) => item.id !== req.params.id);
-  res.json(newMockUsers);
+  User.remove({ _id: req.params.id }, (err, user) => {
+    if (err) {
+      res.send(err);
+    }
+    res.json({ message: "Successfully deleted user!" });
+  });
 };
 
 exports.updateUser = (req, res) => {
-  const index = MockUsers.findIndex((item) => item.id === req.params.id);
-  MockUsers[index] = { ...MockUsers[index], ...req.body };
-  res.json(MockUsers[index]);
+  User.findOneAndUpdate(
+    { _id: req.params.id },
+    req.body,
+    { new: true },
+    (err, contact) => {
+      if (err) {
+        res.send(err);
+      }
+      res.json(contact);
+    }
+  );
 };
