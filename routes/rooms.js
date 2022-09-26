@@ -13,6 +13,6 @@ router.get("/", getRooms);
 router.get("/:id", getRoom);
 router.post("/", createNewRoom);
 router.delete("/:id", deleteRoom);
-router.patch("/:id", updateRoom);
+router.put("/:id", updateRoom);
 
 module.exports = router;
