@@ -25,6 +25,7 @@ const bookingSchema = new mongoose.Schema({
 
   status: {
     type: String,
+    enum: ["In progress", "Check In", "Check Out"],
     required: true,
   },
   id_room: {

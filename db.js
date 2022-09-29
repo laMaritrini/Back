@@ -1,9 +1,7 @@
 const mongoose = require("mongoose");
-const { uri } = require("./env");
+const { uri } = require("./envdb");
 
 mongoose
-  .connect(uri, {
-    useNewUrlParser: true,
-  })
+  .connect(uri, {})
   .then(() => console.log("MongoDB connected..."))
   .catch((err) => console.log(err));

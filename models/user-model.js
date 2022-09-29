@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema({
 
   job_title: {
     type: String,
+    enum: ["Manager", "Room Service", "Reception"],
     required: true,
   },
   email: {
@@ -36,6 +37,7 @@ const userSchema = new mongoose.Schema({
   },
   working_situation: {
     type: String,
+    enum: ["ACTIVE", "INACTIVE"],
     required: true,
   },
 });

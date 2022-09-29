@@ -7,6 +7,7 @@ const roomSchema = new mongoose.Schema({
   },
   room_type: {
     type: String,
+    enum: ["Double Superior", "Single Bed", "Suite", "Double Bed"],
     required: true,
   },
 
@@ -33,6 +34,7 @@ const roomSchema = new mongoose.Schema({
   },
   status: {
     type: String,
+    enum: ["AVAILABLE", "BOOKED"],
     required: true,
   },
 });
