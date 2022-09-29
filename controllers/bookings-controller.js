@@ -1,43 +1,33 @@
 require("../db");
 const Booking = require("../models/booking-model");
 
-exports.getBookings = (req, res) => {
+exports.getBookings = async (req, res) => {
   try {
-    Booking.find({})
-      .populate("id_room")
-      .exec((err, booking) => {
-        if (err) {
-          console.log(err);
-        }
-        res.json(booking);
-      });
+    let bookings = await Booking.find({}).populate("id_room").exec();
+    res.json(bookings);
   } catch (err) {
     return res.json({ success: false, message: err.message });
   }
 };
 
-exports.getBooking = (req, res) => {
+exports.getBooking = async (req, res) => {
   try {
     {
-      Booking.findById(req.params.id)
+      let booking = await Booking.findById(req.params.id)
         .populate("id_room")
-        .exec((err, booking) => {
-          if (err) {
-            console.log(err);
-          }
-          res.json(booking);
-          console.log(`Booking ${booking.id_room.room_number} `);
-        });
+        .exec();
+      res.json(booking);
+      console.log(`Booking ${booking.id_room.room_number} `);
     }
   } catch (err) {
     return res.json({ success: false, message: err.message });
   }
 };
 
-exports.createNewBooking = (req, res) => {
+exports.createNewBooking = async (req, res) => {
   try {
     let newBooking = new Booking(req.body);
-    newBooking.save((err, booking) => {
+    await newBooking.save((err, booking) => {
       if (err) {
         res.send(err);
       }
@@ -48,32 +38,19 @@ exports.createNewBooking = (req, res) => {
   }
 };
 
-exports.deleteBooking = (req, res) => {
+exports.deleteBooking = async (req, res) => {
   try {
-    Booking.remove({ _id: req.params.id }, (err, booking) => {
-      if (err) {
-        res.send(err);
-      }
-      res.json({ message: "Successfully deleted booking!" });
-    });
+    await Booking.findByIdAndDelete(req.params.id);
+    res.json({ message: "Successfully deleted booking!" });
   } catch (err) {
     return res.json({ success: false, message: err.message });
   }
 };
 
-exports.updateBooking = (req, res) => {
+exports.updateBooking = async (req, res) => {
   try {
-    Booking.findOneAndUpdate(
-      { _id: req.params.id },
-      req.body,
-      { new: true },
-      (err, booking) => {
-        if (err) {
-          res.send(err);
-        }
-        res.json(booking);
-      }
-    );
+    let booking = await Booking.findByIdAndUpdate(req.params.id, req.body);
+    res.json(booking);
   } catch (err) {
     return res.json({ success: false, message: err.message });
   }

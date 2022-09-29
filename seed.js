@@ -1,30 +1,30 @@
 const { faker } = require("@faker-js/faker");
 require("./db");
-// const User = require("./models/user-model");
+const User = require("./models/user-model");
 const Room = require("./models/room-model");
-// const Contact = require("./models/contact-model");
+const Contact = require("./models/contact-model");
 const Booking = require("./models/booking-model");
 
-// for (let i = 0; i < 15; i++) {
-//   const users = {
-//     full_name: faker.name.fullName(),
-//     job_title: faker.helpers.arrayElement([
-//       "Manager",
-//       "Room Service",
-//       "Reception",
-//     ]),
-//     email: faker.internet.email(),
-//     photo: faker.image.avatar(),
-//     phone_number: faker.phone.number("+34 ### ## ##"),
-//     password: faker.internet.password(),
-//     start_date: faker.date.recent(),
-//     working_functions: faker.lorem.words(),
-//     working_situation: faker.helpers.arrayElement(["ACTIVE", "INACTIVE"]),
-//   };
-//   const newUser = new User(users);
-//   console.log(newUser);
-//   newUser.save();
-// }
+for (let i = 0; i < 15; i++) {
+  const users = {
+    full_name: faker.name.fullName(),
+    job_title: faker.helpers.arrayElement([
+      "Manager",
+      "Room Service",
+      "Reception",
+    ]),
+    email: faker.internet.email(),
+    photo: faker.image.avatar(),
+    phone_number: faker.phone.number("+34 ### ## ##"),
+    password: faker.internet.password(),
+    start_date: faker.date.recent(),
+    working_functions: faker.lorem.words(),
+    working_situation: faker.helpers.arrayElement(["ACTIVE", "INACTIVE"]),
+  };
+  const newUser = new User(users);
+
+  newUser.save();
+}
 let rooms = [];
 for (let i = 0; i < 1; i++) {
   const room = {
@@ -43,28 +43,27 @@ for (let i = 0; i < 1; i++) {
     status: faker.helpers.arrayElement(["AVAILABLE", "BOOKED"]),
   };
   const newRoom = new Room(room);
-  // newRoom.save();
+  newRoom.save();
   rooms.push(newRoom);
 }
-console.log(rooms, "rooms");
 
-// for (let i = 0; i <= 15; i++) {
-//   const contacts = {
-//     photo: faker.image.avatar(),
-//     date: faker.date.between(
-//       "2015-10-01T00:00:00.000Z",
-//       "2022-07-01T00:00:00.000Z"
-//     ),
-//     customer: faker.name.fullName(),
-//     email: faker.internet.email(),
-//     phone_number: faker.phone.number("+34 ### ## ##"),
-//     title: faker.lorem.words(),
-//     comment: faker.lorem.words(50),
-//   };
-//   const newContact = new Contact(contacts);
-//   console.log(newContact);
-//   newContact.save();
-// }
+for (let i = 0; i <= 15; i++) {
+  const contacts = {
+    photo: faker.image.avatar(),
+    date: faker.date.between(
+      "2015-10-01T00:00:00.000Z",
+      "2022-07-01T00:00:00.000Z"
+    ),
+    customer: faker.name.fullName(),
+    email: faker.internet.email(),
+    phone_number: faker.phone.number("+34 ### ## ##"),
+    title: faker.lorem.words(),
+    comment: faker.lorem.words(50),
+  };
+  const newContact = new Contact(contacts);
+
+  newContact.save();
+}
 
 for (let i = 0; i < 10; i++) {
   const roomRef = rooms[Math.floor(Math.random() * rooms.length)];
@@ -88,6 +87,6 @@ for (let i = 0; i < 10; i++) {
     id_room: roomRef._id,
   };
   const newBooking = new Booking(bookings);
-  console.log(newBooking);
+
   newBooking.save(newBooking);
 }
