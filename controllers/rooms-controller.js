@@ -40,7 +40,7 @@ exports.deleteRoom = async (req, res) => {
 
 exports.updateRoom = async (req, res) => {
   try {
-    let room = Room.findByIdAndUpdate(req.params.id, req.body);
+    let room = await Room.findByIdAndUpdate(req.params.id, req.body);
     res.json(room);
   } catch (err) {
     return res.json({ success: false, message: err.message });

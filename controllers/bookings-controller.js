@@ -27,12 +27,8 @@ exports.getBooking = async (req, res) => {
 exports.createNewBooking = async (req, res) => {
   try {
     let newBooking = new Booking(req.body);
-    await newBooking.save((err, booking) => {
-      if (err) {
-        res.send(err);
-      }
-      res.json(booking);
-    });
+    await newBooking.save();
+    res.json(newBooking)
   } catch (err) {
     return res.json({ success: false, message: err.message });
   }
