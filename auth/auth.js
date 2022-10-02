@@ -2,7 +2,7 @@ require("../db");
 const passport = require("passport");
 const User = require("../models/user-model");
 const localStrategy = require("passport-local").Strategy;
-const JWTstrategy = require("passport-jwt").Strategy;
+const JWTStrategy = require("passport-jwt").Strategy;
 const ExtractJWT = require("passport-jwt").ExtractJwt;
 
 passport.use(
@@ -17,14 +17,17 @@ passport.use(
         const user = await User.findOne({ email });
 
         if (!user) {
-          return done(null, false, { message: "User not found" });
+          console.log(user);
+          return done(null, false, {
+            message: "User not found or wrong password",
+          });
         }
-
         const validate = await user.isValidPassword(password);
-        console.log(validate);
 
         if (!validate) {
-          return done(null, false, { message: "Wrong Password" });
+          return done(null, false, {
+            message: "User not found or wrong password",
+          });
         }
 
         return done(null, user, { message: "Logged in Successfully" });
@@ -36,7 +39,7 @@ passport.use(
 );
 
 passport.use(
-  new JWTstrategy(
+  new JWTStrategy(
     {
       secretOrKey: "TOP_SECRET",
       jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),

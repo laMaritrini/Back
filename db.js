@@ -3,6 +3,6 @@ const { uriExample } = require("./envdb-example");
 const { uri } = require("./envdb");
 
 mongoose
-  .connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(uriExample, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("MongoDB connected..."))
   .catch((err) => console.log(err));
