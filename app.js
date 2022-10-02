@@ -9,10 +9,10 @@ let bookingsRouter = require("./routes/bookings");
 let roomsRouter = require("./routes/rooms");
 let contactRouter = require("./routes/contacts");
 let loginRouter = require("./routes/login");
-// let authRouter = require('./auth/auth')
 
 const passport = require("passport");
-var session = require("express-session");
+require("./auth/auth");
+require("./db");
 
 var app = express();
 
@@ -27,7 +27,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
-// app.use("/auth", authRouter)
+
 app.use("/login", loginRouter);
 
 app.use(

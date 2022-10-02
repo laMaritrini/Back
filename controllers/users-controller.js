@@ -13,7 +13,11 @@ exports.getUsers = async (req, res) => {
 exports.getUser = async (req, res) => {
   try {
     let user = await User.findById(req.params.id);
-    res.json(user);
+    res.json({
+      message: "You made it to the secure route",
+      user: req.user,
+      token: req.query.secret_token,
+    });
   } catch (err) {
     return res.json({ success: false, message: err.message });
   }

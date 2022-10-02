@@ -5,7 +5,7 @@ const Room = require("./models/room-model");
 const Contact = require("./models/contact-model");
 const Booking = require("./models/booking-model");
 
-for (let i = 0; i < 15; i++) {
+for (let i = 0; i < 10; i++) {
   const users = {
     full_name: faker.name.fullName(),
     job_title: faker.helpers.arrayElement([
@@ -16,7 +16,7 @@ for (let i = 0; i < 15; i++) {
     email: faker.internet.email(),
     photo: faker.image.avatar(),
     phone_number: faker.phone.number("+34 ### ## ##"),
-    password: faker.internet.password(),
+    password: "12345",
     start_date: faker.date.recent(),
     working_functions: faker.lorem.words(),
     working_situation: faker.helpers.arrayElement(["ACTIVE", "INACTIVE"]),
@@ -47,7 +47,7 @@ for (let i = 0; i < 1; i++) {
   rooms.push(newRoom);
 }
 
-for (let i = 0; i <= 15; i++) {
+for (let i = 0; i <= 1; i++) {
   const contacts = {
     photo: faker.image.avatar(),
     date: faker.date.between(
@@ -65,7 +65,7 @@ for (let i = 0; i <= 15; i++) {
   newContact.save();
 }
 
-for (let i = 0; i < 10; i++) {
+for (let i = 0; i < 1; i++) {
   const roomRef = rooms[Math.floor(Math.random() * rooms.length)];
   const bookings = {
     full_name: faker.name.fullName(),
