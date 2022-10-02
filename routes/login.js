@@ -1,6 +1,7 @@
 const express = require("express");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
+const { secretKey } = require("../envdb");
 
 const router = express.Router();
 
@@ -15,7 +16,7 @@ router.post("/", async (req, res, next) => {
         if (error) return next(error);
 
         const body = { _id: user._id, email: user.email };
-        const token = jwt.sign({ user: body }, "TOP_SECRET");
+        const token = jwt.sign({ user: body }, secretKey);
 
         return res.json({ token });
       });
@@ -24,7 +25,5 @@ router.post("/", async (req, res, next) => {
     }
   })(req, res, next);
 });
-
-
 
 module.exports = router;
