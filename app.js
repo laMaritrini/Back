@@ -9,6 +9,7 @@ let bookingsRouter = require("./routes/bookings");
 let roomsRouter = require("./routes/rooms");
 let contactRouter = require("./routes/contacts");
 let loginRouter = require("./routes/login");
+let cors = require("cors");
 
 const passport = require("passport");
 require("./auth/auth");
@@ -20,6 +21,7 @@ var app = express();
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
 
+app.use(cors());
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -66,5 +68,6 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render("error");
 });
+
 
 module.exports = app;

@@ -18,7 +18,7 @@ passport.use(
         const user = await User.findOne({ email });
 
         if (!user) {
-          console.log(user);
+         
           return done(null, false, {
             message: "User not found or wrong password",
           });
