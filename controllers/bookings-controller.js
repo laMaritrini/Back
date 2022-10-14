@@ -28,7 +28,7 @@ exports.createNewBooking = async (req, res) => {
   try {
     let newBooking = new Booking(req.body);
     await newBooking.save();
-    res.json(newBooking)
+    res.json(newBooking);
   } catch (err) {
     return res.json({ success: false, message: err.message });
   }
@@ -47,7 +47,8 @@ exports.updateBooking = async (req, res) => {
   try {
     let booking = await Booking.findByIdAndUpdate(req.params.id, req.body);
     res.json(booking);
+    console.log(booking);
   } catch (err) {
-    return res.json({ success: false, message: err.message });
+    return res.json({ status: 500, success: false, message: err.message });
   }
 };

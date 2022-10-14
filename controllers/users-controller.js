@@ -6,18 +6,14 @@ exports.getUsers = async (req, res) => {
     let users = await User.find();
     res.json(users);
   } catch (err) {
-    return res.json({ success: false, message: err.message });
+    return res.json({ status: 400, success: false, message: err.message });
   }
 };
 
 exports.getUser = async (req, res) => {
   try {
     let user = await User.findById(req.params.id);
-    res.json({
-      message: "You made it to the secure route",
-      user: req.user,
-      token: req.query.secret_token,
-    });
+    res.json(user);
   } catch (err) {
     return res.json({ success: false, message: err.message });
   }

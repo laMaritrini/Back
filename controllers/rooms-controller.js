@@ -43,6 +43,6 @@ exports.updateRoom = async (req, res) => {
     let room = await Room.findByIdAndUpdate(req.params.id, req.body);
     res.json(room);
   } catch (err) {
-    return res.json({ success: false, message: err.message });
+    return res.json({ status: 400, success: false, message: err.message });
   }
 };

@@ -18,8 +18,8 @@ passport.use(
         const user = await User.findOne({ email });
 
         if (!user) {
-         
           return done(null, false, {
+            status: 400,
             message: "User not found or wrong password",
           });
         }
@@ -31,7 +31,9 @@ passport.use(
           });
         }
 
-        return done(null, user, { message: "Logged in Successfully" });
+        return done(null, user, {
+          message: "Logged in Successfully",
+        });
       } catch (error) {
         return done(error);
       }
