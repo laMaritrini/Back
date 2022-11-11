@@ -1,64 +1,60 @@
+require("../db");
+
 const passport = require("passport");
+const User = require("../models/user-model");
 const localStrategy = require("passport-local").Strategy;
-// const JWTstrategy = require("passport-jwt").Strategy;
-// const ExtractJWT = require("passport-jwt").ExtractJwt;
+const JWTStrategy = require("passport-jwt").Strategy;
+const ExtractJWT = require("passport-jwt").ExtractJwt;
+// const { secretKey } = require("../env");
+
 
 passport.use(
   "login",
   new localStrategy(
     {
-      usernameField: "username",
+      usernameField: "email",
       passwordField: "password",
     },
-    async (username, password, done) => {
+    async (email, password, done) => {
       try {
-       
-        if (username ) {
-          return done(null, user, { message: "Logged in Successfully" });
+        const user = await User.findOne({ email });
+
+        if (!user) {
+          return done(null, false, {
+            status: 400,
+            message: "User not found or wrong password",
+          });
         }
-        return done(null, false, {
-          message: "User not found or Wrong Password",
+        const validate = await user.isValidPassword(password);
+
+        if (!validate) {
+          return done(null, false, {
+            message: "User not found or wrong password",
+          });
+        }
+
+        return done(null, user, {
+          message: "Logged in Successfully",
         });
       } catch (error) {
-        console.error(error);
         return done(error);
       }
     }
   )
 );
 
-// passport.use(
-//   new JWTstrategy(
-//     {
-//       secretOrKey: "Secret_Key",
-//       jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-//     },
-//     async (token, done) => {
-//       try {
-//         return done(null, token.user);
-//       } catch (error) {
-//         done(error);
-//       }
-//     }
-//   )
-// );
-
-var JwtStrategy = require("passport-jwt").Strategy,
-  ExtractJwt = require("passport-jwt").ExtractJwt;
-var opts = {};
-opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-opts.secretOrKey = "Secret_Key";
-
 passport.use(
-  new JwtStrategy(
+  new JWTStrategy(
     {
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: "Secret_Key",
+      secretOrKey: process.env.SECRET_KEY,
+      jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
     },
-    function (jwtPayload, done) {
-      //find the user in db if needed. This functionality may be omitted if you store everything you'll need in JWT payload.
-
-      return done(null, "datos");
+    async (token, done) => {
+      try {
+        return done(null, token.user);
+      } catch (error) {
+        done(error);
+      }
     }
   )
 );

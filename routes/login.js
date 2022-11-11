@@ -1,44 +1,28 @@
 const express = require("express");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
-
+// const { secretKey } = require("../env");
 const router = express.Router();
-const user = {
-  username: "Dorothy Russel",
-  password: "FRG3T28Y88H8W6GRR",
-};
 
 router.post("/", async (req, res, next) => {
-  console.log(req.body);
-  if (
-    req.body.username === user.username &&
-    req.body.password === user.password
-  ) {
-    const body = { _id: "34", email: "email" };
-    let token = jwt.sign({ user: body }, "Secret_Key");
+  passport.authenticate("login", async (err, user, info) => {
+    try {
+      if (err || !user) {
+        return res.status(400).json(info);
+      }
 
-    return res.json({ token });
-  }
-});
+      req.login(user, { session: false }, async (error) => {
+        if (error) return next(error);
 
-var JwtStrategy = require("passport-jwt").Strategy,
-  ExtractJwt = require("passport-jwt").ExtractJwt;
-var opts = {};
-opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-opts.secretOrKey = "Secret_Key";
+        const body = { _id: user._id, email: user.email };
+        const token = jwt.sign({ user: body }, process.env.SECRET_KEY);
 
-passport.use(
-  new JwtStrategy(
-    {
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: "Secret_Key",
-    },
-    function (jwtPayload, done) {
-      //find the user in db if needed. This functionality may be omitted if you store everything you'll need in JWT payload.
-
-      return done(null, "datos");
+        return res.json({ token });
+      });
+    } catch (error) {
+      return next(error);
     }
-  )
-);
+  })(req, res, next);
+});
 
 module.exports = router;

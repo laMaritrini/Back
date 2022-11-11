@@ -1,28 +1,49 @@
-const MockRooms = require("../data/mockRooms");
+require("../db");
+const Room = require("../models/room-model");
 
-exports.getRooms = (req, res) => {
-  res.json(MockRooms);
+exports.getRooms = async (req, res) => {
+  try {
+    const rooms = await Room.find();
+    res.json(rooms);
+  } catch (err) {
+    return res.json({ success: false, message: err.message });
+  }
 };
 
-exports.getRoom = (req, res) => {
-  const room = MockRooms.findIndex((item) => item.id === req.params.id);
-
-  res.json({ room });
+exports.getRoom = async (req, res) => {
+  try {
+    const room = await Room.findById(req.params.id);
+    res.json(room);
+  } catch (err) {
+    return res.json({ success: false, message: err.message });
+  }
 };
 
-exports.createNewRoom = (req, res) => {
-  const newRoom = { ...req.body };
-  MockRooms.push(newRoom);
-  res.json(newRoom);
+exports.createNewRoom = async (req, res) => {
+  try {
+    let newRoom = new Room(req.body);
+    await newRoom.save();
+    res.json(newRoom);
+  } catch (err) {
+    return res.json({ success: false, message: err.message });
+  }
 };
 
-exports.deleteRoom = (req, res) => {
-  let newMockRooms = MockRooms.filter((item) => item.id !== req.params.id);
-  res.json(newMockRooms);
+exports.deleteRoom = async (req, res) => {
+  try {
+    await Room.findByIdAndDelete(req.params.id);
+    res.json({ message: "Successfully deleted room!" });
+  } catch (err) {
+    return res.json({ success: false, message: err.message });
+  }
 };
 
-exports.updateRoom = (req, res) => {
-  const index = MockRooms.findIndex((item) => item.id === req.params.id);
-  MockRooms[index] = { ...MockRooms[index], ...req.body };
-  res.json(MockRooms[index]);
+exports.updateRoom = async (req, res) => {
+  console.log(req.params.id);
+  try {
+    let room = await Room.findByIdAndUpdate(req.params.id, req.body);
+    res.json(room);
+  } catch (err) {
+    return res.json({ status: 400, success: false, message: err.message });
+  }
 };

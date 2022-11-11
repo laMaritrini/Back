@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 let createError = require("http-errors");
 let express = require("express");
 let path = require("path");
@@ -9,10 +11,11 @@ let bookingsRouter = require("./routes/bookings");
 let roomsRouter = require("./routes/rooms");
 let contactRouter = require("./routes/contacts");
 let loginRouter = require("./routes/login");
-// let authRouter = require('./auth/auth')
+let cors = require("cors");
 
 const passport = require("passport");
-var session = require("express-session");
+require("./auth/auth");
+require("./db");
 
 var app = express();
 
@@ -20,6 +23,7 @@ var app = express();
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
 
+app.use(cors());
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -27,7 +31,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
-// app.use("/auth", authRouter)
+
 app.use("/login", loginRouter);
 
 app.use(
@@ -65,6 +69,9 @@ app.use(function (err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render("error");
+});
+app.listen(app.get("port"), () => {
+  console.log("Server on port ", process.env.PORT);
 });
 
 module.exports = app;

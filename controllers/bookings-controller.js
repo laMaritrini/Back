@@ -1,30 +1,54 @@
-const MockReservations = require("../data/mockReservations");
+require("../db");
+const Booking = require("../models/booking-model");
 
-exports.getBookings = (req, res) => {
-  res.json(MockReservations);
+exports.getBookings = async (req, res) => {
+  try {
+    let bookings = await Booking.find({}).populate("id_room").exec();
+    res.json(bookings);
+  } catch (err) {
+    return res.json({ success: false, message: err.message });
+  }
 };
 
-exports.getBooking = (req, res) => {
-  const index = MockReservations.findIndex((item) => item.id === req.params.id);
-  MockReservations[index] = { ...MockReservations[index] };
-  res.json(MockReservations[index]);
+exports.getBooking = async (req, res) => {
+  try {
+    {
+      let booking = await Booking.findById(req.params.id)
+        .populate("id_room")
+        .exec();
+      res.json(booking);
+      console.log(`Booking ${booking.id_room.room_number} `);
+    }
+  } catch (err) {
+    return res.json({ success: false, message: err.message });
+  }
 };
 
-exports.createNewBooking = (req, res) => {
-  const newBooking = { ...req.body };
-  MockReservations.push(newBooking);
-  res.json(newBooking);
+exports.createNewBooking = async (req, res) => {
+  try {
+    let newBooking = new Booking(req.body);
+    await newBooking.save();
+    res.json(newBooking);
+  } catch (err) {
+    return res.json({ success: false, message: err.message });
+  }
 };
 
-exports.deleteBooking = (req, res) => {
-  let newMockReservations = MockReservations.filter(
-    (item) => item.id !== req.params.id
-  );
-  res.json(newMockReservations);
+exports.deleteBooking = async (req, res) => {
+  try {
+    await Booking.findByIdAndDelete(req.params.id);
+    res.json({ message: "Successfully deleted booking!" });
+  } catch (err) {
+    return res.json({ success: false, message: err.message });
+  }
 };
 
-exports.updateBooking = (req, res) => {
-  const index = MockReservations.findIndex((item) => item.id === req.params.id);
-  MockReservations[index] = { ...MockReservations[index], ...req.body };
-  res.json(MockReservations[index]);
+exports.updateBooking = async (req, res) => {
+  try {
+    let booking = await Booking.findByIdAndUpdate(req.params.id, req.body);
+    res.json(booking);
+    console.log(booking);
+  } catch (err) {
+    return res.json({ status: 500, success: false, message: err.message });
+  }
 };
