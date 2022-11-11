@@ -1,9 +1,10 @@
 const mongoose = require("mongoose");
-const { uriExample } = require("./envdb-example");
-const { uri } = require("./envdb");
+
+// const { uriExample } = require("./envdb-example");
+// const { uri } = require("./env");
 
 mongoose
-  .connect(uri, {
+  .connect(process.env.URI, {
     useFindAndModify: false,
     useNewUrlParser: true,
     useUnifiedTopology: true,

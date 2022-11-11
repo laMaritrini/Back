@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 let createError = require("http-errors");
 let express = require("express");
 let path = require("path");
@@ -67,6 +69,9 @@ app.use(function (err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render("error");
+});
+app.listen(app.get("port"), () => {
+  console.log("Server on port ", process.env.PORT);
 });
 
 module.exports = app;

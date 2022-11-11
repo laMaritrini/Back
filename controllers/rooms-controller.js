@@ -39,6 +39,7 @@ exports.deleteRoom = async (req, res) => {
 };
 
 exports.updateRoom = async (req, res) => {
+  console.log(req.params.id);
   try {
     let room = await Room.findByIdAndUpdate(req.params.id, req.body);
     res.json(room);

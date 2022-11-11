@@ -1,10 +1,12 @@
 require("../db");
+
 const passport = require("passport");
 const User = require("../models/user-model");
 const localStrategy = require("passport-local").Strategy;
 const JWTStrategy = require("passport-jwt").Strategy;
 const ExtractJWT = require("passport-jwt").ExtractJwt;
-const { secretKey } = require("../envdb");
+// const { secretKey } = require("../env");
+
 
 passport.use(
   "login",
@@ -44,7 +46,7 @@ passport.use(
 passport.use(
   new JWTStrategy(
     {
-      secretOrKey: secretKey,
+      secretOrKey: process.env.SECRET_KEY,
       jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
     },
     async (token, done) => {

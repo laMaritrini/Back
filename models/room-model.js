@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 
 const roomSchema = new mongoose.Schema({
-
   photo: {
     type: String,
     required: false,
@@ -18,7 +17,7 @@ const roomSchema = new mongoose.Schema({
   },
   facilities: {
     type: String,
-    required: true,
+    required: false,
   },
   price: {
     type: Number,
