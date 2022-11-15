@@ -8,9 +8,6 @@ on:
     branches:
       - main
   workflow_dispatch:
-  
-env:
-  NODE_VERSION: '16.x' 
 
 jobs:
   build:
@@ -55,5 +52,5 @@ jobs:
         with:
           app-name: 'back-dashboard'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_0CAA3588E75146D798B631582401AEB5 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_0ECA8900FC4B45249DEA110E5CA6B5AB }}
           package: .
