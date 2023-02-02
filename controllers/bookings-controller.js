@@ -3,7 +3,7 @@ const Booking = require("../models/booking-model");
 
 exports.getBookings = async (req, res) => {
   try {
-    let bookings = await Booking.find({}).populate("id_room").exec();
+    let bookings = await Booking.find({}).exec();
     res.json(bookings);
   } catch (err) {
     return res.json({ success: false, message: err.message });
@@ -13,11 +13,8 @@ exports.getBookings = async (req, res) => {
 exports.getBooking = async (req, res) => {
   try {
     {
-      let booking = await Booking.findById(req.params.id)
-        .populate("id_room")
-        .exec();
+      let booking = await Booking.findById(req.params.id).exec();
       res.json(booking);
-      console.log(`Booking ${booking.id_room.room_number} `);
     }
   } catch (err) {
     return res.json({ success: false, message: err.message });
@@ -36,7 +33,8 @@ exports.createNewBooking = async (req, res) => {
 
 exports.deleteBooking = async (req, res) => {
   try {
-    await Booking.findByIdAndDelete(req.params.id);
+    let bookings = Booking.findByIdAndDelete(req.params.id);
+    await bookings;
     res.json({ message: "Successfully deleted booking!" });
   } catch (err) {
     return res.json({ success: false, message: err.message });

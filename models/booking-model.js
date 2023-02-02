@@ -22,15 +22,19 @@ const bookingSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-
+  room_type: {
+    type: String,
+    enum: ["Single Bed", "Double Superior", "Suite", "Double Bed"],
+    required: true,
+  },
+  room_number: {
+    type: Number,
+    required: true,
+  },
   status: {
     type: String,
     enum: ["In progress", "Check In", "Check Out"],
     required: true,
-  },
-  id_room: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Rooms",
   },
 });
 const Booking = mongoose.model("Bookings", bookingSchema);
